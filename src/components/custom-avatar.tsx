@@ -1,4 +1,4 @@
-import { getNameInitials } from '@/utilities/get-name-initials'
+import { getNameInitials } from '@/utilities'
 import { Avatar as AtndAvatar, AvatarProps } from 'antd'
 
 type Props = AvatarProps & {
