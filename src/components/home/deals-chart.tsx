@@ -17,14 +17,38 @@ const DealsChart = () => {
     },
   })
 
-    const dealData = useMemo(() => {
+  const dealData = useMemo(() => {
     return mapDealsData(data?.data)
-    }, [data?.data])
-  
+  }, [data?.data])
+
   const config: AreaConfig = {
     data: dealData,
     xField: 'timeText',
     yField: 'value',
+    isStack: false,
+    seriesField: 'state',
+    animation: true,
+    startOnZero: false,
+    smooth: true,
+    legend: {
+      offsetY: -6,
+    },
+    yAxis: {
+      tickCount: 4,
+      label: {
+        formatter: (v: string) => {
+          return `$${Number(v) / 1000}k`
+        },
+      },
+    },
+    tooltip: {
+      formatter: (data) => {
+        return {
+          name: data.state,
+          value: `$${Number(data.value) / 1000}k`,
+        }
+      },
+    },
   }
 
   return (
