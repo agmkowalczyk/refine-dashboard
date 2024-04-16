@@ -4,17 +4,27 @@ import { Text } from '../text'
 import { useList } from '@refinedev/core'
 import { Area, AreaConfig } from '@ant-design/plots'
 import { DASHBOARD_DEALS_CHART_QUERY } from '@/graphql/queries'
+import { mapDealsData } from '@/utilities/helpers'
+import { useMemo } from 'react'
+import { GetFieldsFromList } from '@refinedev/nestjs-query'
+import { DashboardDealsChartQuery } from '@/graphql/types'
 
 const DealsChart = () => {
-  const { data } = useList({
+  const { data } = useList<GetFieldsFromList<DashboardDealsChartQuery>>({
     resource: 'dealStages',
     meta: {
       gqlQuery: DASHBOARD_DEALS_CHART_QUERY,
     },
   })
 
+    const dealData = useMemo(() => {
+    return mapDealsData(data?.data)
+    }, [data?.data])
+  
   const config: AreaConfig = {
-    data: [],
+    data: dealData,
+    xField: 'timeText',
+    yField: 'value',
   }
 
   return (
