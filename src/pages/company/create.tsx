@@ -1,8 +1,12 @@
-import { Modal } from 'antd'
+import { Form, Input, Modal, Select } from 'antd'
 import { CompanyList } from './list'
-import { useModalForm } from '@refinedev/antd'
+import { useModalForm, useSelect } from '@refinedev/antd'
 import { useGo } from '@refinedev/core'
 import { CREATE_COMPANY_MUTATION } from '@/graphql/mutations'
+import { USERS_SELECT_QUERY } from '@/graphql/queries'
+import SelectOptionWithAvatar from '@/components/select-option-with-avatar'
+import { GetFieldsFromList } from '@refinedev/nestjs-query'
+import { UsersSelectQuery } from '@/graphql/types'
 
 export const Create = () => {
   const go = useGo()
@@ -27,6 +31,16 @@ export const Create = () => {
     },
   })
 
+  const { selectProps, queryResult } = useSelect<
+    GetFieldsFromList<UsersSelectQuery>
+  >({
+    resource: 'users',
+    optionLabel: 'name',
+    meta: {
+      gqlQuery: USERS_SELECT_QUERY,
+    },
+  })
+
   return (
     <CompanyList>
       <Modal
@@ -35,7 +49,38 @@ export const Create = () => {
         onCancel={goToListPage}
         title='Create Company'
         width={512}
-      ></Modal>
+      >
+        <Form {...formProps} layout='vertical'>
+          <Form.Item
+            label='Company name'
+            name='name'
+            rules={[{ required: true }]}
+          >
+            <Input placeholder='Please enter a company name' />
+          </Form.Item>
+          <Form.Item
+            label='Sales owner'
+            name='salerOwnerId'
+            rules={[{ required: true }]}
+          >
+            <Select
+              placeholder='Please select a sales owner'
+              {...selectProps}
+              options={
+                queryResult.data?.data.map((user) => ({
+                  values: user.id,
+                  label: (
+                    <SelectOptionWithAvatar
+                      name={user.name}
+                      avatarUrl={user.avatarUrl ?? undefined}
+                    />
+                  ),
+                })) ?? []
+              }
+            />
+          </Form.Item>
+        </Form>
+      </Modal>
     </CompanyList>
   )
 }
