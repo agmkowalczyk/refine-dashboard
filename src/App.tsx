@@ -17,7 +17,7 @@ import routerBindings, {
 } from '@refinedev/react-router-v6'
 import { App as AntdApp } from 'antd'
 import { BrowserRouter, Outlet, Route, Routes } from 'react-router-dom'
-import { Home, ForgotPassword, Login, Register, CompanyList, Create } from './pages'
+import { Home, ForgotPassword, Login, Register, CompanyList, Create, Edit } from './pages'
 import Layout from './components/layout'
 import { resources } from './config/resources'
 
@@ -63,6 +63,7 @@ function App() {
                   <Route path='/companies' element={<CompanyList />}>
                     <Route index element={<CompanyList />} />
                     <Route path='new' element={<Create />} />
+                    <Route path='edit/:id' element={<Edit />} />
                   </Route>
                 </Route>
               </Routes>
