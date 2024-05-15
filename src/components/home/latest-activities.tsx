@@ -19,7 +19,7 @@ const LatestActivities = () => {
   } = useList({
     resource: 'audits',
     meta: {
-      qglQuery: DASHBOARD_LATEST_ACTIVITIES_AUDITS_QUERY,
+      gqlQuery: DASHBOARD_LATEST_ACTIVITIES_AUDITS_QUERY,
     },
   })
 
@@ -39,7 +39,7 @@ const LatestActivities = () => {
       },
     ],
     meta: {
-      qglQuery: DASHBOARD_LATEST_ACTIVITIES_DEALS_QUERY,
+      gqlQuery: DASHBOARD_LATEST_ACTIVITIES_DEALS_QUERY,
     },
   })
 
@@ -92,7 +92,7 @@ const LatestActivities = () => {
                   }
                   description={
                     <Space size={4}>
-                      <Text strong>{item.user.name}</Text>
+                      <Text strong>{item?.user?.name}</Text>
                       <Text>
                         {item.action === 'CREATE' ? 'created' : 'moved'}
                       </Text>
