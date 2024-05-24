@@ -1,13 +1,17 @@
 import CustomAvatar from '@/components/custom-avatar'
 import SelectOptionWithAvatar from '@/components/select-option-with-avatar'
-import { companySizeOptions } from '@/constants'
+import {
+  businessTypeOptions,
+  companySizeOptions,
+  industryOptions,
+} from '@/constants'
 import { UPDATE_COMPANY_MUTATION } from '@/graphql/mutations'
 import { USERS_SELECT_QUERY } from '@/graphql/queries'
 import { UsersSelectQuery } from '@/graphql/types'
 import { getNameInitials } from '@/utilities'
 import { Edit, useForm, useSelect } from '@refinedev/antd'
 import { GetFieldsFromList } from '@refinedev/nestjs-query'
-import { Col, Form, InputNumber, Row, Select } from 'antd'
+import { Col, Form, Input, InputNumber, Row, Select } from 'antd'
 
 export const EditPage = () => {
   const { saveButtonProps, formProps, formLoading, queryResult } = useForm({
@@ -73,7 +77,24 @@ export const EditPage = () => {
                 <Select options={companySizeOptions} />
               </Form.Item>
               <Form.Item>
-                <InputNumber autoFocus addonBefore='$' min={0} placeholder='0,00'/>
+                <InputNumber
+                  autoFocus
+                  addonBefore='$'
+                  min={0}
+                  placeholder='0,00'
+                />
+              </Form.Item>
+              <Form.Item label='Industry'>
+                <Select options={industryOptions} />
+              </Form.Item>
+              <Form.Item label='Business type'>
+                <Select options={businessTypeOptions} />
+              </Form.Item>
+              <Form.Item label='Country'>
+                <Input placeholder='Country' name='country' />
+              </Form.Item>
+              <Form.Item label='Website'>
+                <Input placeholder='Website' name='website' />
               </Form.Item>
             </Form>
           </Edit>
