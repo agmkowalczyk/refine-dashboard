@@ -5,7 +5,9 @@ import {
 import KanbanColumn from '@/components/tasks/kanban/column'
 import KanbanItem from '@/components/tasks/kanban/item'
 import { TASKS_QUERY, TASK_STAGES_SELECT_QUERY } from '@/graphql/queries'
+import { TaskStage } from '@/graphql/schema.types'
 import { useList } from '@refinedev/core'
+import React from 'react'
 
 const List = () => {
   const { data: stages, isLoading: isLoadingStages } = useList({
@@ -37,7 +39,7 @@ const List = () => {
       },
     ],
     queryOptions: {
-      enabled: !!stages
+      enabled: !!stages,
     },
     pagination: {
       mode: 'off',
@@ -47,11 +49,36 @@ const List = () => {
     },
   })
 
+  const taskStages = React.useMemo(() => {
+    if (!tasks?.data || !!stages?.data) {
+      return {
+        unassignedStage: [],
+        stages: [],
+      }
+    }
+    const unassignedStage = tasks.data.filter((task) => task.stageId === null)
+    const grouped: TaskStage[] = stages?.data.map((stage) => ({
+      ...stage,
+      tasks: tasks.data.filter((task) => task.stageId.tiString() === stage.id),
+    }))
+    return {
+      unassignedStage,
+      columns: grouped,
+    }
+  }, [stages, tasks])
+
+  const handleAddCard = (args: { stageId: string }) => {}
+
   return (
     <>
       <KanbanBoardContainer>
         <KanbanBoard>
-          <KanbanColumn>
+          <KanbanColumn
+            id='unassigned'
+            title='unassigned'
+            count={taskStages.unassignedStage.length || 0}
+            onAddClick={() => handleAddCard({ stageId: 'unassigned' })}
+          >
             <KanbanItem></KanbanItem>
           </KanbanColumn>
           <KanbanColumn></KanbanColumn>
