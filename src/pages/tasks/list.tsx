@@ -2,6 +2,7 @@ import {
   KanbanBoardContainer,
   KanbanBoard,
 } from '@/components/tasks/kanban/board'
+import ProjectCard from '@/components/tasks/kanban/card'
 import KanbanColumn from '@/components/tasks/kanban/column'
 import KanbanItem from '@/components/tasks/kanban/item'
 import { TASKS_QUERY, TASK_STAGES_SELECT_QUERY } from '@/graphql/queries'
@@ -32,7 +33,9 @@ const List = () => {
     },
   })
 
-  const { data: tasks, isLoading: isLoadingTasks } = useList<GetFieldsFromList<TasksQuery>>({
+  const { data: tasks, isLoading: isLoadingTasks } = useList<
+    GetFieldsFromList<TasksQuery>
+  >({
     resource: 'tasks',
     sorters: [
       {
@@ -87,7 +90,7 @@ const List = () => {
                 id={task.id}
                 data={{ ...task, stageId: 'unassigned' }}
               >
-                {task.title}
+                <ProjectCard {...task} dueDate={task.dueDate || ''} />
               </KanbanItem>
             ))}
           </KanbanColumn>
