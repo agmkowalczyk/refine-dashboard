@@ -12,13 +12,16 @@ import {
   ConfigProvider,
   Dropdown,
   MenuProps,
+  Space,
   Tag,
+  Tooltip,
   theme,
 } from 'antd'
 import { useMemo } from 'react'
 import { TextIcon } from './text-icon'
 import dayjs from 'dayjs'
 import { getDateColor } from '@/utilities/get-date-color'
+import CustomAvatar from '@/components/custom-avatar'
 
 type ProjectCardProps = {
   id: string
@@ -121,6 +124,26 @@ const ProjectCard = ({ id, title, dueDate, users }: ProjectCardProps) => {
             >
               {dueDateOptions.text}
             </Tag>
+          )}
+          {!!users?.length && (
+            <Space
+              size={4}
+              wrap
+              direction='horizontal'
+              align='center'
+              style={{
+                display: 'flex',
+                justifyContent: 'flex-end',
+                marginLeft: 'auto',
+                marginRight: 0,
+              }}
+            >
+              {users.map((user) => (
+                <Tooltip key={user.id} title={user.name}>
+                  <CustomAvatar name={user.name} src={user.avatarUrl} />
+                </Tooltip>
+              ))}
+            </Space>
           )}
         </div>
       </Card>
